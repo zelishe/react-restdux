@@ -1,0 +1,45 @@
+{
+  "name": "react-restdux",
+  "version": "1.0.0",
+  "description": "A practical REST API data store for React with Redux",
+  "author": "Sergei Zelentsov <sergei@tapkey.pro>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "npm run build"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zelishe/react-restdux"
+  },
+  "bugs": {
+    "url": "https://github.com/zelishe/react-restdux/issues"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "rest",
+    "api",
+    "store",
+    "state",
+    "react-redux"
+  ],
+  "peerDependencies": {
+    "react-redux": "^7.0.0",
+    "react-thunk": "^1.0.0",
+    "qs": "^6.0.0",
+    "axios": "^0.19.0"
+  },
+  "devDependencies": {
+    "typescript": "~3.5.3",
+    "@types/react-redux": "^7.0.0",
+    "@types/qs": "^6.0.0",
+    "@types/axios": "^0.14.0"
+  }
+}
