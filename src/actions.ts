@@ -25,17 +25,19 @@ import {
 import { EntityStoreConfig } from './models/EntityStoreConfig';
 import { EntityStorePage } from './models/EntityStorePage';
 
+
 // ================================================================================================================
 // === Async actions ==============================================================================================
 // ================================================================================================================
 
 export const findAllAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: string, apiFilter: any) => {
 
-  return async (dispatch: any) => {
+  return async dispatch => {
 
     dispatch(setEntitiesFilterAction(entityName, {apiFilter}));
 
     const entityStorePage: EntityStorePage<T> = await constructApiCall(
+      dispatch,
       entityStoreConfig,
       entityName,
       SUB_STORE_KEY_ENTITIES,
@@ -43,20 +45,23 @@ export const findAllAction = <T>(entityStoreConfig: EntityStoreConfig, entityNam
       ENTITY_STORE_STATUS_LOADING
     );
 
-    dispatch(setEntitiesAction<T>(entityName, {
-      entities: entityStorePage.entities,
-      totalEntities: entityStorePage.totalEntities,
-      status: ENTITY_STORE_STATUS_LOADED
-    }));
+    if (entityStorePage) {
+      dispatch(setEntitiesAction<T>(entityName, {
+        entities: entityStorePage.entities,
+        totalEntities: entityStorePage.totalEntities,
+        status: ENTITY_STORE_STATUS_LOADED
+      }));
+    }
 
   };
 };
 
-export const findByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: string, key: any) => {
+export const findByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: string, key: number | string) => {
 
-  return async (dispatch: any) => {
+  return async dispatch => {
 
     const entity = await constructApiCall(
+      dispatch,
       entityStoreConfig,
       entityName,
       SUB_STORE_KEY_SELECTED_ENTITY,
@@ -64,19 +69,22 @@ export const findByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entityN
       ENTITY_STORE_STATUS_LOADING,
     );
 
-    dispatch(setSelectedEntityAction<T>(entityName, {
-      entity,
-      status: ENTITY_STORE_STATUS_LOADED
-    }));
+    if (entity) {
+      dispatch(setSelectedEntityAction<T>(entityName, {
+        entity,
+        status: ENTITY_STORE_STATUS_LOADED
+      }));
+    }
 
   }
 };
 
 export const saveAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: string, entity: T) => {
 
-  return async (dispatch: any) => {
+  return async dispatch => {
 
     entity = await constructApiCall(
+      dispatch,
       entityStoreConfig,
       entityName,
       SUB_STORE_KEY_SELECTED_ENTITY,
@@ -84,10 +92,12 @@ export const saveAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: 
       ENTITY_STORE_STATUS_SAVING
     );
 
-    dispatch(setSelectedEntityAction<T>(entityName, {
-      entity,
-      status: ENTITY_STORE_STATUS_SAVED
-    }));
+    if (entity) {
+      dispatch(setSelectedEntityAction<T>(entityName, {
+        entity,
+        status: ENTITY_STORE_STATUS_SAVED
+      }));
+    }
 
   };
 
@@ -95,9 +105,10 @@ export const saveAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: 
 
 export const deleteByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: string, key: any) => {
 
-  return async (dispatch: any) => {
+  return async dispatch => {
 
     const entity = await constructApiCall(
+      dispatch,
       entityStoreConfig,
       entityName,
       SUB_STORE_KEY_SELECTED_ENTITY,
@@ -105,7 +116,9 @@ export const deleteByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entit
       ENTITY_STORE_STATUS_DELETING
     );
 
-    dispatch(afterDeleteEntityAction<T>(entityName, {entity}));
+    if (entity) {
+      dispatch(afterDeleteEntityAction<T>(entityName, {entity}));
+    }
 
   };
 

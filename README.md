@@ -95,18 +95,19 @@ Now you can start using the useRestdux hook in your react application
 ```typescript
 import React from 'react';
 import restduxStoreConfig from './restduxStoreConfig';
-import { useRestdux } from 'react-restdux';
-import { Person } from './Person';
+import { RestduxService } from 'react-restdux';
+import { Person } from './Person'; 
+import { useSelector } from 'react-redux';
 
 export default function PersonView() {
 
-    const personService = useRestdux<Person>(restduxStoreConfig, 'Person');
-    
-    // Request Restdux to load Person with id=1
-    personService.findByKey(1); 
+    const personService = new RestduxService<Person>(restduxStoreConfig, 'Person');
     
     // Use a Redux selector to access the loaded entity 
-    const person = personService.selectedEntity;
+    const person = useSelector(personService.selectedEntity);
+
+    // Request Restdux to load Person with id=1
+    personService.findByKey(1);   
 
     // This will output a div with person ID in it    
     return (
@@ -247,7 +248,15 @@ This method sets the selected entity of current redux slice. It is useful for se
 
 ### Displaying the data
 
-You can use the following properties from useRexdux() hook. They are simply a result of useSelector() hook from react-redux. 
+You can use the following properties from RexduxService. They can be used with useSelector() hook from react-redux.
+
+```typescript
+import { useSelector } from 'react-redux'; 
+import { RestduxService } from './RestduxService';
+
+const personService = new RestduxService<Person>(restduxStoreConfig, 'Person');
+const person = useSelector(personService.selectedEntity);
+``` 
 
 #### selectedEntity
 

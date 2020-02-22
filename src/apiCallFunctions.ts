@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux';
 import { SUB_STORE_KEY_ENTITIES, SUB_STORE_KEY_SELECTED_ENTITY } from './constants';
 import {
   setEntitiesBusyIndicationAction,
@@ -65,7 +64,7 @@ export const findAllApiCall = async <T>(entityStoreConfig: EntityStoreConfig, en
 
 };
 
-export const findByKeyApiCall = async <T>(entityStoreConfig: EntityStoreConfig, entityName: string, key: any) => {
+export const findByKeyApiCall = async <T>(entityStoreConfig: EntityStoreConfig, entityName: string, key: number | string) => {
 
   try {
     const httpResponse = await getAxiosInstance(entityStoreConfig).get(`${getApiEndpoint(entityStoreConfig, entityName)}/${key}`);
@@ -107,14 +106,13 @@ export const deleteByKeyApiCall = async <T extends { [key: string]: any }>(entit
 };
 
 export const constructApiCall = async (
+  dispatch,
   entityStoreConfig: EntityStoreConfig,
   entityName: string,
   subStoreKey: string,
   apiCallFunction: any,
   busyStatus: string
 ) => {
-
-  const dispatch = useDispatch();
 
   let setBusyIndicationAction: any;
   let setErrorAction: any;
@@ -131,6 +129,7 @@ export const constructApiCall = async (
   }
 
   const busyIndicationTimeout = setTimeout(() => {
+    console.log('z');
     dispatch(setBusyIndicationAction(entityStoreConfig, entityName, { isBusy: true, status: busyStatus }));
   }, entityStoreConfig.busyIndicationDelay);
 
