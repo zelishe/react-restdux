@@ -14,12 +14,10 @@ import {
   setSelectedEntityAction
 } from './actions';
 import { ENTITY_STORE_STATUS_LOADED } from './constants';
-import { Store } from 'redux';
-import { shallowEqual, useSelector } from 'react-redux';
 
 export class RestduxService<T> {
 
-  store: Store;
+  store: any;
   entityStoreConfig: EntityStoreConfig;
   entityName: string;
 
@@ -27,7 +25,7 @@ export class RestduxService<T> {
   dispatch;
 
   constructor(
-    store: Store,
+    store: any,
     entityStoreConfig: EntityStoreConfig,
     entityName: string
   ) {
@@ -51,18 +49,18 @@ export class RestduxService<T> {
   }
 
   selectedEntity = (store: any) => store[this.storeKey].selectedEntity.entity as T;
-  selectedEntityState = useSelector((store: any) => store[this.storeKey].selectedEntity) as EntityState<T>;
-  selectedEntityIsBusy = useSelector((store: any) => store[this.storeKey].selectedEntity.isBusy) as boolean;
-  selectedEntityStatus = useSelector((store: any) => store[this.storeKey].selectedEntity.status) as string;
-  selectedEntityError = useSelector((store: any) => store[this.storeKey].selectedEntity.error) as any;
+  selectedEntityState = (store: any) => store[this.storeKey].selectedEntity as EntityState<T>;
+  selectedEntityIsBusy = (store: any) => store[this.storeKey].selectedEntity.isBusy as boolean;
+  selectedEntityStatus = (store: any) => store[this.storeKey].selectedEntity.status as string;
+  selectedEntityError = (store: any) => store[this.storeKey].selectedEntity.error as any;
 
-  entities = useSelector((store: any) => store[this.storeKey].collection.entityStates.map((entityState: EntityState<T>) => entityState.entity), shallowEqual) as T[];
-  entityStates = useSelector((store: any) => store[this.storeKey].collection.entityStates) as EntityState<T>[];
-  collection = useSelector((store: any) => store[this.storeKey].collection) as EntityCollectionState<T>;
-  totalEntities = useSelector((store: any) => store[this.storeKey].collection.totalEntities) as number;
-  collectionIsBusy = useSelector((store: any) => store[this.storeKey].collection.isBusy) as boolean;
-  collectionStatus = useSelector((store: any) => store[this.storeKey].collection.status) as string;
-  collectionError = useSelector((store: any) => store[this.storeKey].collection.error) as any;
+  entities = (store: any) => store[this.storeKey].collection.entityStates.map((entityState: EntityState<T>) => entityState.entity) as T[];
+  entityStates = (store: any) => store[this.storeKey].collection.entityStates as EntityState<T>[];
+  collection = (store: any) => store[this.storeKey].collection as EntityCollectionState<T>;
+  totalEntities = (store: any) => store[this.storeKey].collection.totalEntities as number;
+  collectionIsBusy = (store: any) => store[this.storeKey].collection.isBusy as boolean;
+  collectionStatus = (store: any) => store[this.storeKey].collection.status as string;
+  collectionError = (store: any) => store[this.storeKey].collection.error as any;
 
   setSelectedEntity(entity: T, status: string = ENTITY_STORE_STATUS_LOADED) {
     this.store.dispatch(setSelectedEntityAction<T>(this.entityName, { entity, status }))
