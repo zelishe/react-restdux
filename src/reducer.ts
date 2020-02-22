@@ -86,22 +86,22 @@ const createRestduxReducer = <T>(entityStoreConfig: EntityStoreConfig, entityNam
 // === API response processing actions ==============================================================================
 // ==================================================================================================================
 
-const onSetEntities = <T>(state: any, payload: { entities: T[], totalEntities: number, completeStatus: string }) => {
+const onSetEntities = <T>(state: any, payload: { entities: T[], totalEntities: number, status: string }) => {
 
   return {
     ...state,
     collection: {
       ...state.collection,
       isBusy: false,
-      status: payload.completeStatus,
+      status: payload.status,
       entityStates: payload.entities.map(entity => {
         return {
           isBusy: false,
-          status: payload.completeStatus,
+          status: payload.status,
           entity
         } as EntityState<T>;
       }),
-      totalEntities: payload.totalEntities
+      totalEntities: (payload.totalEntities) ? payload.totalEntities : payload.entities.length
     }
   };
 
@@ -146,13 +146,13 @@ const onSetEntitiesError = (state: any, payload: {error: any}) => {
 
 };
 
-const onSetSelectedEntity = <T extends { [key: string]: any }>(entityConfig: EntityConfig, state: any, payload: { entity: T, completeStatus: string }) => {
+const onSetSelectedEntity = <T extends { [key: string]: any }>(entityConfig: EntityConfig, state: any, payload: { entity: T, status: string }) => {
 
   const updatedState = { ...state };
 
   const updatedEntityState: EntityState<T> = {
     isBusy: false,
-    status: payload.completeStatus,
+    status: payload.status,
     entity: payload.entity,
     error: undefined
   };
@@ -160,9 +160,9 @@ const onSetSelectedEntity = <T extends { [key: string]: any }>(entityConfig: Ent
   // We update selectedEntity only if we loaded it or if we saved it & keyProperty equals current id of selectedEntity
   // This is done because we should be able to save entities of the list separately from the "master" view
   if (
-    payload.completeStatus === ENTITY_STORE_STATUS_LOADED ||
+    payload.status === ENTITY_STORE_STATUS_LOADED ||
     (
-      payload.completeStatus === ENTITY_STORE_STATUS_SAVED &&
+      payload.status === ENTITY_STORE_STATUS_SAVED &&
       (!state.selectedEntity.entity || state.selectedEntity.entity[entityConfig.keyProperty] === payload.entity[entityConfig.keyProperty])
     )
   ) {

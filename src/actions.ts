@@ -46,7 +46,7 @@ export const findAllAction = <T>(entityStoreConfig: EntityStoreConfig, entityNam
     dispatch(setEntitiesAction<T>(entityName, {
       entities: entityStorePage.entities,
       totalEntities: entityStorePage.totalEntities,
-      completeStatus: ENTITY_STORE_STATUS_LOADED
+      status: ENTITY_STORE_STATUS_LOADED
     }));
 
   };
@@ -66,7 +66,7 @@ export const findByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entityN
 
     dispatch(setSelectedEntityAction<T>(entityName, {
       entity,
-      completeStatus: ENTITY_STORE_STATUS_LOADED
+      status: ENTITY_STORE_STATUS_LOADED
     }));
 
   }
@@ -86,7 +86,7 @@ export const saveAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: 
 
     dispatch(setSelectedEntityAction<T>(entityName, {
       entity,
-      completeStatus: ENTITY_STORE_STATUS_SAVED
+      status: ENTITY_STORE_STATUS_SAVED
     }));
 
   };
@@ -115,7 +115,19 @@ export const deleteByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entit
 // === State modification actions =================================================================================
 // ================================================================================================================
 
-export const setEntitiesAction = <T>(entityName: string, payload: {entities: T[], totalEntities: number, completeStatus: string}) => {
+export const setEntitiesAction = <T>(
+  entityName: string,
+  payload: {entities: T[], totalEntities: number, status: string} = {
+    entities: [],
+    totalEntities: 0,
+    status: ENTITY_STORE_STATUS_LOADED
+  }
+) => {
+
+  if (!payload.entities) { payload.entities = [] }
+  if (!payload.totalEntities) { payload.totalEntities = payload.entities.length }
+  if (!payload.status) { payload.status = ENTITY_STORE_STATUS_LOADED }
+
   return {
     type: ACTION_TYPE_SET_ENTITIES,
     entityName,
@@ -147,7 +159,7 @@ export const setEntitiesFilterAction = (entityName: string, payload: {apiFilter:
   };
 };
 
-export const setSelectedEntityAction = <T>(entityName: string, payload: {entity: T, completeStatus: string}) => {
+export const setSelectedEntityAction = <T>(entityName: string, payload: {entity: T, status: string}) => {
   return {
     type: ACTION_TYPE_SET_SELECTED_ENTITY,
     entityName,

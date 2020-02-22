@@ -1,9 +1,17 @@
 import { defaultEntityStoreConfig, EntityStoreConfig } from './models/EntityStoreConfig';
 import { defaultEntityConfig } from './models/EntityConfig';
-import { deleteByKeyAction, findAllAction, findByKeyAction, saveAction } from './actions';
+import {
+  deleteByKeyAction,
+  findAllAction,
+  findByKeyAction,
+  saveAction,
+  setEntitiesAction,
+  setSelectedEntityAction
+} from './actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { EntityState } from './models/EntityState';
 import { EntityCollectionState } from './models/EntityCollectionState';
+import { ENTITY_STORE_STATUS_LOADED } from './constants';
 
 export const useRestdux = <T>(entityStoreConfig: EntityStoreConfig, entityName: string) => {
 
@@ -38,6 +46,16 @@ export const useRestdux = <T>(entityStoreConfig: EntityStoreConfig, entityName: 
     collectionStatus: useSelector((store: any) => store[storeKey].collection.status) as string,
     collectionError: useSelector((store: any) => store[storeKey].collection.error) as any,
 
+    setSelectedEntity(entity: T, status: string = ENTITY_STORE_STATUS_LOADED) {
+      dispatch(setSelectedEntityAction<T>(entityName, { entity, status }))
+    },
+    setEntities(entities: T[] = [], status: string = ENTITY_STORE_STATUS_LOADED) {
+      dispatch(setEntitiesAction<T>(entityName, {
+        entities,
+        totalEntities: entities.length,
+        status
+      }))
+    },
     findAll(apiFilter?: any) {
       dispatch(findAllAction<T>(entityStoreConfig, entityName, apiFilter));
     },

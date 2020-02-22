@@ -186,7 +186,7 @@ You can enable the entity edit form in case of an error, for example.
 
 Each of your entity services have the following methods to request data manipulations.
 
-**getAll(filter: any)** 
+**findAll(filter: any)** 
 
 Request: GET + {apiUr}l/{apiPath}?filterParam1=x&filterParam2=y 
 
@@ -199,7 +199,7 @@ This method retrieves collection data from the backend API
  - Total amount of entities is put into "collections.totalEntities" or the appropriate EntityStoreState.
  - entityStoreState.collection switches to { isBusy: false, status: 'loaded' }
 
-**getByKey(key: any)**
+**findByKey(key: any)**
 
 Request: GET + {apiUrl}/{apiPath}/{key} 
 
@@ -235,6 +235,15 @@ Request: DELETE + {apiUrl}/{apiPath}/{key}
  - Server response is put into updates the "selectedEntity" part of the appropriate EntityStoreState.
  - selectedEntity is switched to { isBusy: false, status: 'saved' }
  - **IMPORTANT** If this entity is present in "collection" part of the state, it will be removed from there as well. That entity state will also switch to 'deleting' status, when appropriate event will be fired.
+
+**setEntities(entities: T[], status: string = 'loaded')**
+
+This method sets the entities collection, including the totalElements to whatever is provided in entities parameter. It is useful to set the collection state without making an API request.
+
+**setSelectedEntity(entity: T, status: string = 'loaded')**
+
+This method sets the selected entity of current redux slice. It is useful for setting the selected entity without making an API request. 
+
 
 ### Displaying the data
 
