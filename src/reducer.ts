@@ -73,7 +73,7 @@ const createRestduxReducer = <T>(entityStoreConfig: EntityStoreConfig, entityNam
       case ACTION_TYPE_SET_SELECTED_ENTITY_BUSY_INDICATION:
         return onSetSelectedEntityBusyIndication<T>(entityConfig, state, action.payload);
       case ACTION_TYPE_SET_SELECTED_ENTITY_ERROR:
-        return onSetSelectedEntityError(entityConfig, state, action.payload);
+        return onSetSelectedEntityError<T>(entityConfig, state, action.payload);
       case ACTION_TYPE_AFTER_DELETE_ENTITY:
         return onAfterDeleteEntity<T>(entityConfig, state, action.payload);
       default:
@@ -193,7 +193,7 @@ const onSetSelectedEntityBusyIndication = <T>(entityConfig: EntityConfig, state:
 
 };
 
-const onSetSelectedEntityError = (entityConfig: EntityConfig, state: any, payload: {error: any}) => {
+const onSetSelectedEntityError = <T>(entityConfig: EntityConfig, state: any, payload: {error: any}) => {
 
   const updatedEntityState = {
     ...state.selectedEntity,
