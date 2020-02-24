@@ -129,8 +129,7 @@ export const constructApiCall = async (
   }
 
   const busyIndicationTimeout = setTimeout(() => {
-    console.log('z');
-    dispatch(setBusyIndicationAction(entityStoreConfig, entityName, { isBusy: true, status: busyStatus }));
+    dispatch(setBusyIndicationAction(entityName, { isBusy: true, status: busyStatus }));
   }, entityStoreConfig.busyIndicationDelay);
 
   try {
@@ -138,7 +137,8 @@ export const constructApiCall = async (
     clearTimeout(busyIndicationTimeout);
     return result;
   } catch (error) {
-    dispatch(setErrorAction(entityStoreConfig, entityName, { error }));
+    clearTimeout(busyIndicationTimeout);
+    dispatch(setErrorAction(entityName, { error }));
   }
 
 };
