@@ -48,8 +48,12 @@ export const findAllApiCall = async <T>(entityStoreConfig: EntityStoreConfig, en
   const httpResponse = await getAxiosInstance(entityStoreConfig).get(`${getApiEndpoint(entityStoreConfig, entityName)}${getQueryString(filter)}`);
   const entityStorePage: EntityStorePage<T> = entityStoreConfig.parseCollectionHttpResponse(httpResponse, { filter });
 
-  if (!entityStorePage || !entityStorePage.entities || !entityStorePage.totalEntities) {
+  if (!entityStorePage || !entityStorePage.entities) {
     throw new Error(collectionParseErrorMessage);
+  }
+
+  if (!entityStorePage.totalEntities) {
+    entityStorePage.totalEntities = entityStorePage.entities.length;
   }
 
   return entityStorePage;

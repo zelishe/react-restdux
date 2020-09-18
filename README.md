@@ -98,10 +98,11 @@ import restduxStoreConfig from './restduxStoreConfig';
 import { RestduxService } from 'react-restdux';
 import { Person } from './Person'; 
 import { useSelector } from 'react-redux';
+import store from '../redux/store';
 
 export default function PersonView() {
 
-    const personService = new RestduxService<Person>(restduxStoreConfig, 'Person');
+    const personService = new RestduxService<Person>(store, restduxStoreConfig, 'Person');
     
     // Use a Redux selector to access the loaded entity 
     const person = useSelector(personService.selectedEntity);
@@ -253,8 +254,9 @@ You can use the following properties from RexduxService. They can be used with u
 ```typescript
 import { useSelector } from 'react-redux'; 
 import { RestduxService } from './RestduxService';
+import store from '../redux/store'
 
-const personService = new RestduxService<Person>(restduxStoreConfig, 'Person');
+const personService = new RestduxService<Person>(store, restduxStoreConfig, 'Person');
 const person = useSelector(personService.selectedEntity);
 ``` 
 
