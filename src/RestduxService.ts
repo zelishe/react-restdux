@@ -13,7 +13,7 @@ import {
   setEntitiesAction,
   setSelectedEntityAction
 } from './actions';
-import { ENTITY_STORE_STATUS_LOADED } from './constants';
+import { ENTITY_STORE_STATUS_INITIAL, ENTITY_STORE_STATUS_LOADED } from './constants';
 
 export class RestduxService<T> {
 
@@ -66,7 +66,7 @@ export class RestduxService<T> {
     this.store.dispatch(setSelectedEntityAction<T>(this.entityName, { entity, status }))
   }
 
-  setEntities(entities: T[] = [], status: string = ENTITY_STORE_STATUS_LOADED) {
+  setEntities(entities?: T[], status: string = ENTITY_STORE_STATUS_LOADED) {
     this.store.dispatch(setEntitiesAction<T>(this.entityName, {
       entities,
       totalEntities: entities.length,
