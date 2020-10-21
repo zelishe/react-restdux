@@ -83,7 +83,7 @@ export const saveAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: 
 
   return async dispatch => {
 
-    entity = await constructApiCall(
+    const entity = await constructApiCall(
       dispatch,
       entityStoreConfig,
       entityName,
@@ -117,7 +117,7 @@ export const deleteByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entit
     );
 
     if (entity) {
-      dispatch(afterDeleteEntityAction<T>(entityName, {entity}));
+      dispatch(afterDeleteEntityAction<T>(entityName, {key}));
     }
 
   };
@@ -196,7 +196,7 @@ export const setSelectedEntityErrorAction = (entityName: string, payload: {error
   };
 };
 
-export const afterDeleteEntityAction = <T>(entityName: string, payload: {entity: T}) => {
+export const afterDeleteEntityAction = <T>(entityName: string, payload: {key: any}) => {
   return {
     type: ACTION_TYPE_AFTER_DELETE_ENTITY,
     entityName,

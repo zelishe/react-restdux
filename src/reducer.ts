@@ -17,7 +17,7 @@ import { EntityStoreState } from './models/EntityStoreState';
 import { EntityState } from './models/EntityState';
 import { EntityCollectionState } from './models/EntityCollectionState';
 import { EntityStoreConfig } from './models/EntityStoreConfig';
-import { EntityConfig } from './models/EntityConfig';
+import { defaultEntityConfig, EntityConfig } from './models/EntityConfig';
 
 const initialState: EntityStoreState<any> = {
   selectedEntity: {
@@ -148,6 +148,8 @@ const onSetEntitiesError = (state: any, payload: {error: any}) => {
 
 const onSetSelectedEntity = <T extends { [key: string]: any }>(entityConfig: EntityConfig, state: any, payload: { entity: T, status: string }) => {
 
+  const keyProperty = entityConfig.keyProperty ? entityConfig.keyProperty : defaultEntityConfig.keyProperty;
+
   const updatedState = { ...state };
 
   const updatedEntityState: EntityState<T> = {
@@ -163,7 +165,7 @@ const onSetSelectedEntity = <T extends { [key: string]: any }>(entityConfig: Ent
     payload.status === ENTITY_STORE_STATUS_LOADED ||
     (
       payload.status === ENTITY_STORE_STATUS_SAVED &&
-      (!state.selectedEntity.entity || state.selectedEntity.entity[entityConfig.keyProperty] === payload.entity[entityConfig.keyProperty])
+      (!state.selectedEntity.entity || !state.selectedEntity.entity[keyProperty] || state.selectedEntity.entity[keyProperty] === payload.entity[keyProperty])
     )
   ) {
     updatedState.selectedEntity = updatedEntityState;
@@ -210,9 +212,9 @@ const onSetSelectedEntityError = <T>(entityConfig: EntityConfig, state: any, pay
 
 };
 
-const onAfterDeleteEntity = <T extends { [key: string]: any }>(entityConfig: EntityConfig, state: any, payload: { entity: T }) => {
+const onAfterDeleteEntity = <T extends { [key: string]: any }>(entityConfig: EntityConfig, state: any, payload: { key: any }) => {
 
-  const keyProperty = entityConfig.keyProperty;
+  const keyProperty = entityConfig.keyProperty ? entityConfig.keyProperty : defaultEntityConfig.keyProperty;
 
   const updatedState = { ...state };
 
@@ -224,13 +226,15 @@ const onAfterDeleteEntity = <T extends { [key: string]: any }>(entityConfig: Ent
     error: null
   };
 
-  if (state.selectedEntity.entity && state.selectedEntity.entity[keyProperty] === payload.entity[keyProperty]) {
+  if (state.selectedEntity.entity && state.selectedEntity.entity[keyProperty] === payload.key) {
     updatedState.selectedEntity = updatedEntityState;
   }
 
   // Removing deleted entity from state.entityStates, if it's found there
   const existingEntityIndex = updatedState.collection.entityStates.findIndex(
-    (entityState: EntityState<T>) => entityState.entity[keyProperty] === payload.entity[keyProperty]
+    (entityState: EntityState<T>) => {
+      return entityState.entity[keyProperty] === payload.key
+    }
   );
   if (existingEntityIndex !== -1) {
     updatedState.collection.entityStates.splice(existingEntityIndex, 1);
@@ -242,10 +246,12 @@ const onAfterDeleteEntity = <T extends { [key: string]: any }>(entityConfig: Ent
 
 const updateEntityStateInCollection = <T extends { [key: string]: any }>(entityConfig: EntityConfig, collection: EntityCollectionState<T>, updatedEntityState: EntityState<T>): EntityCollectionState<T> => {
 
-  if (updatedEntityState.entity && updatedEntityState.entity[entityConfig.keyProperty] && collection && collection.entityStates) {
+  const keyProperty = entityConfig.keyProperty ? entityConfig.keyProperty : defaultEntityConfig.keyProperty;
+
+  if (updatedEntityState.entity && updatedEntityState.entity[keyProperty] && collection && collection.entityStates) {
 
     const existingEntityIndex = collection.entityStates.findIndex(
-      entityState => entityState.entity[entityConfig.keyProperty] === updatedEntityState.entity[entityConfig.keyProperty]
+      entityState => entityState.entity[keyProperty] === updatedEntityState.entity[keyProperty]
     );
 
     if (existingEntityIndex !== -1) {

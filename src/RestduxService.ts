@@ -56,6 +56,7 @@ export class RestduxService<T> {
 
   entities = (store: any) => store[this.storeKey].collection.entityStates.map((entityState: EntityState<T>) => entityState.entity) as T[];
   entityStates = (store: any) => store[this.storeKey].collection.entityStates as EntityState<T>[];
+  apiFilter = (store: any) => store[this.storeKey].collection.apiFilter as any;
   collection = (store: any) => store[this.storeKey].collection as EntityCollectionState<T>;
   totalEntities = (store: any) => store[this.storeKey].collection.totalEntities as number;
   collectionIsBusy = (store: any) => store[this.storeKey].collection.isBusy as boolean;
