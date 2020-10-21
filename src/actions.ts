@@ -83,7 +83,7 @@ export const saveAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: 
 
   return async dispatch => {
 
-    const entity = await constructApiCall(
+    entity = await constructApiCall(
       dispatch,
       entityStoreConfig,
       entityName,
