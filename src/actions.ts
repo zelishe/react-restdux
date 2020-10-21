@@ -36,21 +36,25 @@ export const findAllAction = <T>(entityStoreConfig: EntityStoreConfig, entityNam
 
     dispatch(setEntitiesFilterAction(entityName, {apiFilter}));
 
-    const entityStorePage: EntityStorePage<T> = await constructApiCall(
-      dispatch,
-      entityStoreConfig,
-      entityName,
-      SUB_STORE_KEY_ENTITIES,
-      findAllApiCall(entityStoreConfig, entityName, apiFilter),
-      ENTITY_STORE_STATUS_LOADING
-    );
+    try {
+      const entityStorePage: EntityStorePage<T> = await constructApiCall(
+        dispatch,
+        entityStoreConfig,
+        entityName,
+        SUB_STORE_KEY_ENTITIES,
+        findAllApiCall(entityStoreConfig, entityName, apiFilter),
+        ENTITY_STORE_STATUS_LOADING
+      );
 
-    if (entityStorePage) {
-      dispatch(setEntitiesAction<T>(entityName, {
-        entities: entityStorePage.entities,
-        totalEntities: entityStorePage.totalEntities,
-        status: ENTITY_STORE_STATUS_LOADED
-      }));
+      if (entityStorePage) {
+        dispatch(setEntitiesAction<T>(entityName, {
+          entities: entityStorePage.entities,
+          totalEntities: entityStorePage.totalEntities,
+          status: ENTITY_STORE_STATUS_LOADED
+        }));
+      }
+    } catch (error) {
+      // All of the error handling is done inside the API call function
     }
 
   };
@@ -60,20 +64,22 @@ export const findByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entityN
 
   return async dispatch => {
 
-    const entity = await constructApiCall(
-      dispatch,
-      entityStoreConfig,
-      entityName,
-      SUB_STORE_KEY_SELECTED_ENTITY,
-      findByKeyApiCall(entityStoreConfig, entityName, key),
-      ENTITY_STORE_STATUS_LOADING,
-    );
+    try {
+      const entity = await constructApiCall(
+        dispatch,
+        entityStoreConfig,
+        entityName,
+        SUB_STORE_KEY_SELECTED_ENTITY,
+        findByKeyApiCall(entityStoreConfig, entityName, key),
+        ENTITY_STORE_STATUS_LOADING,
+      );
 
-    if (entity) {
       dispatch(setSelectedEntityAction<T>(entityName, {
         entity,
         status: ENTITY_STORE_STATUS_LOADED
       }));
+    } catch (error) {
+      // All of the error handling is done inside the API call function
     }
 
   }
@@ -83,20 +89,22 @@ export const saveAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: 
 
   return async dispatch => {
 
-    entity = await constructApiCall(
-      dispatch,
-      entityStoreConfig,
-      entityName,
-      SUB_STORE_KEY_SELECTED_ENTITY,
-      saveApiCall(entityStoreConfig, entityName, entity),
-      ENTITY_STORE_STATUS_SAVING
-    );
+    try {
+      entity = await constructApiCall(
+        dispatch,
+        entityStoreConfig,
+        entityName,
+        SUB_STORE_KEY_SELECTED_ENTITY,
+        saveApiCall(entityStoreConfig, entityName, entity),
+        ENTITY_STORE_STATUS_SAVING
+      );
 
-    if (entity) {
       dispatch(setSelectedEntityAction<T>(entityName, {
         entity,
         status: ENTITY_STORE_STATUS_SAVED
       }));
+    } catch (error) {
+      // All of the error handling is done inside the API call function
     }
 
   };
@@ -107,17 +115,19 @@ export const deleteByKeyAction = <T>(entityStoreConfig: EntityStoreConfig, entit
 
   return async dispatch => {
 
-    const entity = await constructApiCall(
-      dispatch,
-      entityStoreConfig,
-      entityName,
-      SUB_STORE_KEY_SELECTED_ENTITY,
-      deleteByKeyApiCall(entityStoreConfig, entityName, key),
-      ENTITY_STORE_STATUS_DELETING
-    );
+    try {
+      await constructApiCall(
+        dispatch,
+        entityStoreConfig,
+        entityName,
+        SUB_STORE_KEY_SELECTED_ENTITY,
+        deleteByKeyApiCall(entityStoreConfig, entityName, key),
+        ENTITY_STORE_STATUS_DELETING
+      );
 
-    if (entity) {
       dispatch(afterDeleteEntityAction<T>(entityName, {key}));
+    } catch (error) {
+      // All of the error handling is done inside the API call function
     }
 
   };

@@ -214,6 +214,8 @@ const onSetSelectedEntityError = <T>(entityConfig: EntityConfig, state: any, pay
 
 const onAfterDeleteEntity = <T extends { [key: string]: any }>(entityConfig: EntityConfig, state: any, payload: { key: any }) => {
 
+  console.log('onAfterDeleteEntity', payload);
+
   const keyProperty = entityConfig.keyProperty ? entityConfig.keyProperty : defaultEntityConfig.keyProperty;
 
   const updatedState = { ...state };

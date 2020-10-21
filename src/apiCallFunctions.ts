@@ -11,20 +11,16 @@ import { AxiosInstance } from 'axios';
 
 import * as qs from 'qs';
 
-const collectionParseErrorMessage = '[Restdux][EntityCrudService] Could not parse http response. Define or update parseCollectionHttpResponse in entityStoreConfig, please';
-const entityParseErrorMessage     = '[Restdux][EntityCrudService] Could not parse http response. Define or update parseEntityHttpResponse in entityStoreConfig, please';
+const collectionParseErrorMessage = '[Restdux][EntityCrudService] Define parseCollectionHttpResponse in entityStoreConfig, please';
+const entityParseErrorMessage     = '[Restdux][EntityCrudService] Define parseEntityHttpResponse in entityStoreConfig, please';
 const noAxiosProvidedErrorMessage = 'No axios instance was provided in entityStoreConfig';
 
 const processEntityHttpResponse = <T>(entityStoreConfig: EntityStoreConfig, initialHttpResponse: any, params: any): T => {
-
-  const entity = entityStoreConfig.parseEntityHttpResponse(initialHttpResponse, params);
-
-  if (!entity) {
+  if (!entityStoreConfig.parseEntityHttpResponse) {
     throw new Error(entityParseErrorMessage);
   }
 
-  return entity;
-
+  return entityStoreConfig.parseEntityHttpResponse(initialHttpResponse, params);
 };
 
 const getApiEndpoint = (entityStoreConfig: EntityStoreConfig, entityName: string) =>
@@ -45,12 +41,12 @@ const getAxiosInstance = (entityStoreConfig: EntityStoreConfig): AxiosInstance =
 
 export const findAllApiCall = async <T>(entityStoreConfig: EntityStoreConfig, entityName: string, filter: any = null) => {
 
-  const httpResponse = await getAxiosInstance(entityStoreConfig).get(`${getApiEndpoint(entityStoreConfig, entityName)}${getQueryString(filter)}`);
-  const entityStorePage: EntityStorePage<T> = entityStoreConfig.parseCollectionHttpResponse(httpResponse, { filter });
-
-  if (!entityStorePage || !entityStorePage.entities) {
+  if (!entityStoreConfig.parseCollectionHttpResponse) {
     throw new Error(collectionParseErrorMessage);
   }
+
+  const httpResponse = await getAxiosInstance(entityStoreConfig).get(`${getApiEndpoint(entityStoreConfig, entityName)}${getQueryString(filter)}`);
+  const entityStorePage: EntityStorePage<T> = entityStoreConfig.parseCollectionHttpResponse(httpResponse, { filter });
 
   if (!entityStorePage.totalEntities) {
     entityStorePage.totalEntities = entityStorePage.entities.length;
@@ -118,6 +114,7 @@ export const constructApiCall = async (
   } catch (error) {
     clearTimeout(busyIndicationTimeout);
     dispatch(setErrorAction(entityName, { error }));
+    console.error(error);
   }
 
 };
