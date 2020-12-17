@@ -10,10 +10,10 @@ import {
   findAllAction,
   findByKeyAction,
   saveAction,
-  setEntitiesAction,
+  setEntitiesAction, setEntitiesFilterAction,
   setSelectedEntityAction
 } from './actions';
-import { ENTITY_STORE_STATUS_INITIAL, ENTITY_STORE_STATUS_LOADED } from './constants';
+import { ENTITY_STORE_STATUS_LOADED } from './constants';
 
 export class RestduxService<T> {
 
@@ -62,6 +62,10 @@ export class RestduxService<T> {
   collectionIsBusy = (store: any) => store[this.storeKey].collection.isBusy as boolean;
   collectionStatus = (store: any) => store[this.storeKey].collection.status as string;
   collectionError = (store: any) => store[this.storeKey].collection.error as any;
+
+  setFilter(apiFilter: any) {
+    this.store.dispatch(setEntitiesFilterAction(this.entityName, { apiFilter }));
+  }
 
   setSelectedEntity(entity: T, status: string = ENTITY_STORE_STATUS_LOADED) {
     this.store.dispatch(setSelectedEntityAction<T>(this.entityName, { entity, status }))

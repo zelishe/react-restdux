@@ -246,6 +246,9 @@ This method sets the entities collection, including the totalElements to whateve
 
 This method sets the selected entity of current redux slice. It is useful for setting the selected entity without making an API request. 
 
+**setFilter(apiFilter: any)**
+
+This method sets the apiFilter part of the current slice. It does not load any data from API. 
 
 ### Displaying the data
 
