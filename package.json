@@ -1,6 +1,6 @@
 {
   "name": "react-restdux",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "A practical REST API data store for React with Redux",
   "author": "Sergei Zelentsov <sergei@tapkey.pro>",
   "license": "MIT",
@@ -31,16 +31,16 @@
     "react-redux"
   ],
   "dependencies": {
-    "react-redux": "^7.0.0",
-    "react-thunk": "^1.0.0",
-    "qs": "^6.0.0",
-    "axios": "^0.20.0"
+    "axios": "^0.21.1",
+    "qs": "~6.0.0",
+    "react-redux": "~7.0.0",
+    "react-thunk": "~1.0.0"
   },
   "devDependencies": {
-    "typescript": "~3.5.3",
-    "@types/react-redux": "^7.0.0",
+    "typescript": "~3.9.7",
+    "@types/react-redux": "^7.1.14",
     "@types/redux-thunk": "^2.1.0",
-    "@types/qs": "^6.0.0",
+    "@types/qs": "^6.9.5",
     "@types/axios": "^0.14.0"
   }
 }
