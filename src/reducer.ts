@@ -3,7 +3,7 @@ import {
   ACTION_TYPE_SET_ENTITIES,
   ACTION_TYPE_SET_ENTITIES_BUSY_INDICATION,
   ACTION_TYPE_SET_ENTITIES_ERROR,
-  ACTION_TYPE_SET_ENTITIES_FILTER,
+  ACTION_TYPE_SET_ENTITIES_FILTER, ACTION_TYPE_SET_ENTITY_STATES,
   ACTION_TYPE_SET_SELECTED_ENTITY,
   ACTION_TYPE_SET_SELECTED_ENTITY_BUSY_INDICATION,
   ACTION_TYPE_SET_SELECTED_ENTITY_ERROR,
@@ -61,6 +61,8 @@ const createRestduxReducer = <T>(entityStoreConfig: EntityStoreConfig, entityNam
     switch (action.type) {
       case ACTION_TYPE_SET_ENTITIES:
         return onSetEntities<T>(state, action.payload);
+      case ACTION_TYPE_SET_ENTITY_STATES:
+        return onSetEntityStates<T>(state, action.payload);
       case ACTION_TYPE_SET_ENTITIES_BUSY_INDICATION:
         return onSetEntitiesBusyIndication(state, action.payload);
       case ACTION_TYPE_SET_ENTITIES_FILTER:
@@ -102,6 +104,21 @@ const onSetEntities = <T>(state: any, payload: { entities: T[], totalEntities: n
         } as EntityState<T>;
       }),
       totalEntities: (payload.totalEntities) ? payload.totalEntities : payload.entities.length
+    }
+  };
+
+};
+
+const onSetEntityStates = <T>(state: any, payload: { entityStates: EntityState<T>[], totalEntities: number, status: string }) => {
+
+  return {
+    ...state,
+    collection: {
+      ...state.collection,
+      isBusy: false,
+      status: payload.status,
+      entityStates: payload.entityStates,
+      totalEntities: (payload.totalEntities) ? payload.totalEntities : payload.entityStates.length
     }
   };
 

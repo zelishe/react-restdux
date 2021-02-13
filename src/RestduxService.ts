@@ -10,7 +10,7 @@ import {
   findAllAction,
   findByKeyAction,
   saveAction,
-  setEntitiesAction, setEntitiesFilterAction,
+  setEntitiesAction, setEntitiesFilterAction, setEntityStatesAction,
   setSelectedEntityAction
 } from './actions';
 import { ENTITY_STORE_STATUS_LOADED } from './constants';
@@ -69,6 +69,14 @@ export class RestduxService<T> {
 
   setSelectedEntity(entity: T, status: string = ENTITY_STORE_STATUS_LOADED) {
     this.store.dispatch(setSelectedEntityAction<T>(this.entityName, { entity, status }))
+  }
+
+  setEntityStates(entityStates: EntityState<T>[], status = ENTITY_STORE_STATUS_LOADED) {
+    this.store.dispatch(setEntityStatesAction<T>(this.entityName, {
+      entityStates,
+      totalEntities: entityStates.length,
+      status
+    }))
   }
 
   setEntities(entities?: T[], status: string = ENTITY_STORE_STATUS_LOADED) {

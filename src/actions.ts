@@ -3,7 +3,7 @@ import {
   ACTION_TYPE_SET_ENTITIES,
   ACTION_TYPE_SET_ENTITIES_BUSY_INDICATION,
   ACTION_TYPE_SET_ENTITIES_ERROR,
-  ACTION_TYPE_SET_ENTITIES_FILTER,
+  ACTION_TYPE_SET_ENTITIES_FILTER, ACTION_TYPE_SET_ENTITY_STATES,
   ACTION_TYPE_SET_SELECTED_ENTITY,
   ACTION_TYPE_SET_SELECTED_ENTITY_BUSY_INDICATION,
   ACTION_TYPE_SET_SELECTED_ENTITY_ERROR,
@@ -24,6 +24,7 @@ import {
 } from './apiCallFunctions';
 import { EntityStoreConfig } from './models/EntityStoreConfig';
 import { EntityStorePage } from './models/EntityStorePage';
+import { EntityState } from './models';
 
 
 // ================================================================================================================
@@ -157,6 +158,27 @@ export const setEntitiesAction = <T>(
     payload
   };
 };
+
+export const setEntityStatesAction = <T>(
+  entityName: string,
+  payload: {entityStates: EntityState<T>[], totalEntities: number, status: string} = {
+    entityStates: [],
+    totalEntities: 0,
+    status: ENTITY_STORE_STATUS_LOADED
+  }
+) => {
+
+  if (!payload.entityStates) { payload.entityStates = [] }
+  if (!payload.totalEntities) { payload.totalEntities = payload.entityStates.length }
+  if (!payload.status) { payload.status = ENTITY_STORE_STATUS_LOADED }
+
+  return {
+    type: ACTION_TYPE_SET_ENTITY_STATES,
+    entityName,
+    payload
+  };
+};
+
 
 export const setEntitiesBusyIndicationAction = (entityName: string, payload: {isBusy: boolean, status: string}) => {
   return {

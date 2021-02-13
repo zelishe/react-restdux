@@ -242,6 +242,10 @@ Request: DELETE + {apiUrl}/{apiPath}/{key}
 
 This method sets the entities collection, including the totalElements to whatever is provided in entities parameter. It is useful to set the collection state without making an API request.
 
+**setEntityStates(entityStates: EntityState<T>[], status: string = 'loaded')**
+
+This method sets the entity states collection "as is", including the totalElements to whatever is provided in entities parameter. It is useful to set the collection state without making an API request. It is useful to mass-add new elements which status differs from the rest of the collection (newly added "processing" items, for example).
+
 **setSelectedEntity(entity: T, status: string = 'loaded')**
 
 This method sets the selected entity of current redux slice. It is useful for setting the selected entity without making an API request. 
