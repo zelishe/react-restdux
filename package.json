@@ -1,6 +1,6 @@
 {
   "name": "react-restdux",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "A practical REST API data store for React with Redux",
   "author": "Sergei Zelentsov <sergei@tapkey.pro>",
   "license": "MIT",

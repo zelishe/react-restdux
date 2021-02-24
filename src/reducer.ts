@@ -231,8 +231,6 @@ const onSetSelectedEntityError = <T>(entityConfig: EntityConfig, state: any, pay
 
 const onAfterDeleteEntity = <T extends { [key: string]: any }>(entityConfig: EntityConfig, state: any, payload: { key: any }) => {
 
-  console.log('onAfterDeleteEntity', payload);
-
   const keyProperty = entityConfig.keyProperty ? entityConfig.keyProperty : defaultEntityConfig.keyProperty;
 
   const updatedState = { ...state };
@@ -256,7 +254,13 @@ const onAfterDeleteEntity = <T extends { [key: string]: any }>(entityConfig: Ent
     }
   );
   if (existingEntityIndex !== -1) {
-    updatedState.collection.entityStates.splice(existingEntityIndex, 1);
+    const updatedCollection = { ...state.collection };
+    updatedCollection.entityStates.splice(existingEntityIndex, 1);
+    updatedState.collection = {
+      ...updatedCollection,
+      entityStates: [ ...updatedCollection.entityStates ],
+      totalEntities: updatedState.collection.totalEntities - 1
+    };
   }
 
   return updatedState;
