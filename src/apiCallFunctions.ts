@@ -114,7 +114,6 @@ export const constructApiCall = async (
   } catch (error) {
     clearTimeout(busyIndicationTimeout);
     dispatch(setErrorAction(entityName, { error }));
-    console.error(error);
   }
 
 };

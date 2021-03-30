@@ -100,10 +100,12 @@ export const saveAction = <T>(entityStoreConfig: EntityStoreConfig, entityName: 
         ENTITY_STORE_STATUS_SAVING
       );
 
-      dispatch(setSelectedEntityAction<T>(entityName, {
-        entity,
-        status: ENTITY_STORE_STATUS_SAVED
-      }));
+      if (entity) {
+        dispatch(setSelectedEntityAction<T>(entityName, {
+          entity,
+          status: ENTITY_STORE_STATUS_SAVED
+        }));
+      }
     } catch (error) {
       // All of the error handling is done inside the API call function
     }

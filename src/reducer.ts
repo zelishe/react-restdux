@@ -279,7 +279,7 @@ const updateEntityStateInCollection = <T extends { [key: string]: any }>(entityC
 
     if (existingEntityIndex !== -1) {
       const updatedCollection = { ...collection };
-      collection.entityStates[existingEntityIndex] = updatedEntityState;
+      updatedCollection.entityStates[existingEntityIndex] = updatedEntityState;
       return updatedCollection;
     }
   }
